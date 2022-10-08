@@ -1,0 +1,59 @@
+printf '// +build tools\npackage tools\nimport (_ "github.com/99designs/gqlgen"\n _ "github.com/99designs/gqlgen/graphql/introspection")' | gofmt > tools.go
+
+printf '// +build tools\npackage tools\nimport _ "github.com/99designs/gqlgen"' | gofmt > tools.go
+
+go mod tidy
+
+go run github.com/99designs/gqlgen init
+go run github.com/99designs/gqlgen generate
+
+go get -d github.com/99designs/gqlgen
+
+
+type User {
+    id: ID!
+    username: String!
+    email: String!
+
+    meetups: [Meetup!]!
+}
+
+type Meetup {
+    id: ID!
+    name: String!
+    description: String!
+    user: User!
+}
+
+type Query {
+    meetups: [Meetup!]!
+}
+
+
+delete schema resoler
+cd graph
+
+
+-------------------------------------
+mutation createVideo {
+  createVideo(input: {title: "Video 2", url: "https://youtube.com/vid-2", userId: "2"}) {
+    author {
+      id
+    }
+    title
+    url
+  }
+}
+
+
+query findVideo {
+  videos {
+    id
+    title
+    url
+    author {
+      id
+      name
+    }
+  }
+}
