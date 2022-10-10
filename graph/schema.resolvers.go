@@ -5,29 +5,34 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"gql-with-go/graph/generated"
 	"gql-with-go/graph/model"
+	"gql-with-go/repository"
 	"math/rand"
+	"strconv"
 )
+
+var videoRepo repository.VideoRepository = repository.New()
 
 // CreateVideo is the resolver for the createVideo field.
 func (r *mutationResolver) CreateVideo(ctx context.Context, input model.NewVideo) (*model.Video, error) {
 	video := &model.Video{
-		ID:     fmt.Sprintf("T%d", rand.Int()),
+		ID:     strconv.Itoa(rand.Int()),
 		Title:  input.Title,
 		URL:    input.URL,
 		Author: &model.User{ID: input.UserID, Name: "user " + input.UserID},
 	}
 
-	r.videos = append(r.videos, video)
+	videoRepo.Save(video)
+	//r.videos = append(r.videos, video)
 
 	return video, nil
 }
 
 // Videos is the resolver for the videos field.
 func (r *queryResolver) Videos(ctx context.Context) ([]*model.Video, error) {
-	return r.videos, nil
+	//return r.videos, nil
+	return videoRepo.FindAll(), nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

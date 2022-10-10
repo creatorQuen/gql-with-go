@@ -1,0 +1,8 @@
+  services:
+    api_mongo:
+      image: mongo:latest
+      container_name: api_mongo
+      volumes:
+        - ./mongo-volume:/data/db
+      ports:
+        - "27017:27017"

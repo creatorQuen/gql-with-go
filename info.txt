@@ -57,3 +57,6 @@ query findVideo {
     }
   }
 }
+
+
+sudo chmod -R 777 ./mongo-volume
